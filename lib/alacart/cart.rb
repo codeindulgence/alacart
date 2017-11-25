@@ -5,5 +5,9 @@ module Alacart
     def initialize(inventory)
       @inventory = inventory
     end
+
+    def add(sku)
+      true
+    end
   end
 end

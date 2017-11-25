@@ -8,11 +8,15 @@ class CartTest < Minitest::Test
       sku2: 20,
       sku3: 3.45
     }
+    @cart = Alacart::Cart.new @inventory
   end
 
   def test_initializing_cart_inventory
-    cart = Alacart::Cart.new @inventory
-    assert_equal cart.inventory, @inventory
+    assert_equal @cart.inventory, @inventory
+  end
+
+  def test_adding_items
+    assert @cart.add('sku1')
   end
 
 end
