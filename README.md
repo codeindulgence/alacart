@@ -18,8 +18,8 @@ Usage
 require 'alacart'
 
 inventory = {
-  sku1: 100
-  sku2: 20
+  sku1: 100,
+  sku2: 20,
   sku3: 3.45
 }
 
