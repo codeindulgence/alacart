@@ -3,12 +3,22 @@ module Alacart
     attr_reader :inventory
 
     def initialize(inventory)
-      @inventory = inventory
-      @skus = inventory.keys.map(&:to_s)
+      # Make sure all keys are strings
+      @inventory = Hash[inventory.map{|k,v| [k.to_s, v]}]
+
+      @items = Array.new
     end
 
     def add(sku)
-      @skus.include? sku
+      sku = sku.to_s
+      @items << sku
+      @inventory.include? sku
+    end
+
+    def total
+      @items.map do |item|
+        inventory[item]
+      end.reduce(:+)
     end
   end
 end
