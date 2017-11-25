@@ -4,10 +4,11 @@ module Alacart
 
     def initialize(inventory)
       @inventory = inventory
+      @skus = inventory.keys.map(&:to_s)
     end
 
     def add(sku)
-      true
+      @skus.include? sku
     end
   end
 end

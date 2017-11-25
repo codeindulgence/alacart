@@ -19,4 +19,8 @@ class CartTest < Minitest::Test
     assert @cart.add('sku1')
   end
 
+  def test_adding_invalid_items
+    assert !@cart.add('invalid')
+  end
+
 end
