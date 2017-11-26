@@ -9,8 +9,11 @@ module Alacart
     end
 
     def add(sku)
-      @items << sku
-      @inventory.include? sku
+      @items << sku if @inventory.include? sku
+    end
+
+    def include?(sku)
+      @items.include? sku
     end
 
     def discounts

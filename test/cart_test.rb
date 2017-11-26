@@ -20,10 +20,12 @@ class CartTest < Minitest::Test
 
   def test_adding_items
     assert @cart.add('sku1')
+    assert @cart.include? 'sku1'
   end
 
   def test_adding_invalid_items
     assert !@cart.add('invalid')
+    assert !@cart.include?('invalid')
   end
 
   def test_cart_total
