@@ -48,6 +48,11 @@ class CartTest < Minitest::Test
     assert_equal ['sku1_multibuy_3'], @cart.discounts
     assert_equal 200, @cart.total
 
+    # 6 for 4 on 3 for 2
+    3.times { @cart.add 'sku1' }
+    assert_equal ['sku1_multibuy_3'] * 2, @cart.discounts
+    assert_equal 400, @cart.total
+
     # BOGOF
     setup
     @cart.add_modifier sku: 'sku1', type: :multibuy, params: [2]
@@ -60,13 +65,6 @@ class CartTest < Minitest::Test
     @cart.add_modifier sku: 'sku1', type: :multibuy, params: [5]
     4.times { @cart.add 'sku1' }
     assert_equal [], @cart.discounts
-    assert_equal 400, @cart.total
-
-    # 6 for 4 on 3 for 2
-    setup
-    @cart.add_modifier sku: 'sku1', type: :multibuy, params: [3]
-    6.times { @cart.add 'sku1' }
-    assert_equal ['sku1_multibuy_3'] * 2, @cart.discounts
     assert_equal 400, @cart.total
   end
 
