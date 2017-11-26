@@ -34,12 +34,20 @@ class CartTest < Minitest::Test
   end
 
   def test_multibuy
-    items = ['sku1'] * 3
     modifier = {sku: 'sku1', type: :multibuy, params: [3]}
     cart = Alacart::Cart.new(@inventory, [modifier])
-    items.each {|item| cart.add item }
+    3.times { cart.add 'sku1' }
     assert_equal ['sku1_multibuy_3'], cart.discounts
     assert_equal 200, cart.total
+  end
+
+  def test_bulk_discount
+    items = ['sku1'] * 5
+    modifier = {sku: 'sku1', type: :bulk, params: [4, 50]}
+    cart = Alacart::Cart.new(@inventory, [modifier])
+    items.each {|item| cart.add item }
+    assert_equal ['sku1_bulk_4_50'] * 5, cart.discounts
+    assert_equal 250, cart.total
   end
 
 end

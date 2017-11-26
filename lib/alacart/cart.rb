@@ -1,6 +1,6 @@
 module Alacart
   class Cart
-    attr_reader :inventory
+    attr_reader :inventory, :items
 
     def initialize(inventory, modifiers = [])
       @inventory = inventory
@@ -40,11 +40,22 @@ module Alacart
     end
 
     def create_multibuy_modifier(sku, *opts)
-      value = opts.first
+      count = opts.first
       amount = @inventory[sku]
-      mod_sku = '%s_%s_%s' % [sku, 'multibuy', value]
+      mod_sku = '%s_%s_%s' % [sku, 'multibuy', count]
       @inventory[mod_sku] = amount * -1
-      proc {|items| [mod_sku] * (items.count{|i|i==sku}/value)}
+      proc {|items| [mod_sku] * (items.count{|i|i==sku}/count)}
     end
+
+    def create_bulk_modifier(sku, *opts)
+      count, discount = opts
+      mod_sku = '%s_%s_%s_%s' % [sku, 'bulk', count, discount]
+      @inventory[mod_sku] = -1 * discount
+      proc do |items|
+        num_skus = items.count{|i|i==sku}
+        [mod_sku] * num_skus if num_skus > count
+      end
+    end
+
   end
 end
