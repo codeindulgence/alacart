@@ -70,7 +70,13 @@ class CartTest < Minitest::Test
 
   def test_bulk_discount
     @cart.add_modifier sku: 'sku1', type: :bulk, params: [4, 50]
-    5.times { @cart.add 'sku1' }
+    # Nothing off for 4
+    4.times { @cart.add 'sku1' }
+    assert_equal [], @cart.discounts
+    assert_equal 400, @cart.total
+
+    # $50 off for more than 4
+    @cart.add 'sku1'
     assert_equal ['sku1_bulk_4_50'] * 5, @cart.discounts
     assert_equal 250, @cart.total
   end

@@ -62,7 +62,7 @@ module Alacart
       @inventory[mod_sku] = -1 * discount
       proc do |items|
         num_skus = items.count{|i|i==sku}
-        [mod_sku] * num_skus if num_skus > count
+        num_skus > count ? [mod_sku] * num_skus : []
       end
     end
 
