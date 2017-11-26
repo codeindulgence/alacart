@@ -99,4 +99,42 @@ class CartTest < Minitest::Test
     assert_equal 120, @cart.total
   end
 
+  def test_mixed_modifiers
+    inventory = {
+      'ipd' => 549.99,
+      'mbp' => 1399.99,
+      'atv' => 109.50,
+      'vga' => 30.00
+    }
+    modifiers = [
+      {sku: 'atv', type: :multibuy, params: [3]},
+      {sku: 'ipd', type: :bulk, params: [4, 50]},
+      {sku: 'mbp', type: :freebie, params: ['vga']}
+    ]
+    cart = Alacart::Cart.new(inventory, modifiers)
+
+    # SKUs Scanned: atv, atv, atv, vga Total expected: $249.00
+    3.times { cart.add 'atv' }
+    cart.add 'vga'
+    assert_equal 249.00, cart.total
+    cart.empty!
+
+    # SKUs Scanned: atv, ipd, ipd, atv, ipd, ipd, ipd Total expected: $2718.95
+    cart.add 'atv'
+    cart.add 'ipd'
+    cart.add 'ipd'
+    cart.add 'atv'
+    cart.add 'ipd'
+    cart.add 'ipd'
+    cart.add 'ipd'
+    assert_equal 2718.95, cart.total
+    cart.empty!
+
+    # SKUs Scanned: mbp, vga, ipd Total expected: $1949.98
+    cart.add 'mbp'
+    cart.add 'vga'
+    cart.add 'ipd'
+    assert_equal 1949.98, cart.total
+  end
+
 end
