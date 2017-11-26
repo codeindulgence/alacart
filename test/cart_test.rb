@@ -28,6 +28,12 @@ class CartTest < Minitest::Test
     assert !@cart.include?('invalid')
   end
 
+  def test_cart_empty
+    @cart.add 'sku1'
+    @cart.empty!
+    assert @cart.items.empty?
+  end
+
   def test_cart_total
     @cart.add 'sku1'
     @cart.add 'sku2'

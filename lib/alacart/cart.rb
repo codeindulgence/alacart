@@ -5,7 +5,7 @@ module Alacart
     def initialize(inventory, modifiers = [])
       @inventory = inventory
       @modifiers = create_modifier_procs(modifiers)
-      @items = Array.new
+      @items = []
     end
 
     def add(sku)
@@ -14,6 +14,10 @@ module Alacart
 
     def include?(sku)
       @items.include? sku
+    end
+
+    def empty!
+      @items = []
     end
 
     def discounts
