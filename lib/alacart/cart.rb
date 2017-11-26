@@ -8,6 +8,10 @@ module Alacart
       @items = []
     end
 
+    def add_modifier(modifier)
+      @modifiers.merge! create_modifier_procs([modifier])
+    end
+
     def add(sku)
       @items << sku if @inventory.include? sku
     end

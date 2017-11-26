@@ -42,29 +42,25 @@ class CartTest < Minitest::Test
   end
 
   def test_multibuy
-    modifier = {sku: 'sku1', type: :multibuy, params: [3]}
-    cart = Alacart::Cart.new(@inventory, [modifier])
-    3.times { cart.add 'sku1' }
-    assert_equal ['sku1_multibuy_3'], cart.discounts
-    assert_equal 200, cart.total
+    @cart.add_modifier sku: 'sku1', type: :multibuy, params: [3]
+    3.times { @cart.add 'sku1' }
+    assert_equal ['sku1_multibuy_3'], @cart.discounts
+    assert_equal 200, @cart.total
   end
 
   def test_bulk_discount
-    items = ['sku1'] * 5
-    modifier = {sku: 'sku1', type: :bulk, params: [4, 50]}
-    cart = Alacart::Cart.new(@inventory, [modifier])
-    items.each {|item| cart.add item }
-    assert_equal ['sku1_bulk_4_50'] * 5, cart.discounts
-    assert_equal 250, cart.total
+    @cart.add_modifier sku: 'sku1', type: :bulk, params: [4, 50]
+    5.times { @cart.add 'sku1' }
+    assert_equal ['sku1_bulk_4_50'] * 5, @cart.discounts
+    assert_equal 250, @cart.total
   end
 
   def test_freebie
-    items = ['sku1', 'sku2']
-    modifier = {sku: 'sku1', type: :freebie, params: ['sku2']}
-    cart = Alacart::Cart.new(@inventory, [modifier])
-    items.each {|item| cart.add item }
-    assert_equal ['sku1_freebie_sku2'], cart.discounts
-    assert_equal 100, cart.total
+    @cart.add_modifier sku: 'sku1', type: :freebie, params: ['sku2']
+    @cart.add 'sku1'
+    @cart.add 'sku2'
+    assert_equal ['sku1_freebie_sku2'], @cart.discounts
+    assert_equal 100, @cart.total
   end
 
 end
