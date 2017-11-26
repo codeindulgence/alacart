@@ -2,30 +2,57 @@ Alacart
 =======
 Super simple shopping cart interface
 
+
 Installation
 ------------
-Build it:  
-`gem build alacart.gemspec`
+Build & install:
+
+```
+gem build alacart.gemspec
+gem install alacart*.gem
+```
 
 
-Install it:  
-`gem install alacart*.gem`
+Synopsis
+--------
 
-Usage
------
+Define your inventory:
+
+```
+inventory = {
+  'ipd' => 549.99,
+  'mbp' => 1399.99,
+  'atv' => 109.50,
+  'vga' => 30.00
+}
+```
+
+
+Define discount modifiers:
+
+```
+modifiers = [
+  {sku: 'atv', type: :multibuy, params: [3]},
+  {sku: 'ipd', type: :bulk, params: [4, 50]},
+  {sku: 'mbp', type: :freebie, params: ['vga']}
+]
+```
+
+
+Initialise the cart:
 
 ```
 require 'alacart'
 
-inventory = {
-  sku1: 100,
-  sku2: 20,
-  sku3: 3.45
-}
+cart = Alacart::Cart.new(inventory, modifiers)
 
-cart = Alacart::Cart.new(inventory)
-cart.add 'sku1' # True
-cart.add 'sku2' # True
-cart.add 'sku3' # True
-cart.total # 123.45
+```
+
+Add some items:
+
+```
+cart.add 'ipd'
+cart.add 'mbp'
+cart.add 'atv'
+cart.total # 2059.48
 ```
