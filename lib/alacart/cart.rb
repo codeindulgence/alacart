@@ -9,13 +9,20 @@ module Alacart
     end
 
     def add(sku)
-      sku = sku.to_s
       @items << sku
       @inventory.include? sku
     end
 
+    def discounts
+      @items.uniq.map do |sku|
+        (@modifiers[sku] || []).map do |modifier|
+          modifier.call @items
+        end
+      end.flatten
+    end
+
     def total
-      @items.map do |item|
+      (@items + discounts).map do |item|
         inventory[item]
       end.reduce(:+)
     end
