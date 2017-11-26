@@ -8,8 +8,14 @@ Installation
 Build & install:
 
 ```
-gem build alacart.gemspec
-gem install alacart*.gem
+$ gem build alacart.gemspec
+$ gem install alacart*.gem
+```
+
+Or just:
+
+```
+require_relative './lib/alacart'
 ```
 
 
