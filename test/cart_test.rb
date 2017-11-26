@@ -1,12 +1,11 @@
 require_relative 'test_helper.rb'
 
 class CartTest < Minitest::Test
-
   def setup
     @inventory = {
-      sku1: 100,
-      sku2: 20,
-      sku3: 3.45
+      'sku1' =>  100,
+      'sku2' =>  20,
+      'sku3' =>  3.45
     }
     @cart = Alacart::Cart.new @inventory
   end
@@ -32,6 +31,15 @@ class CartTest < Minitest::Test
     @cart.add 'sku2'
     @cart.add 'sku3'
     assert_equal 123.45, @cart.total
+  end
+
+  def test_multibuy
+    modifiers = [
+      {sku: 'sku1', type: :multibuy, params: [3]}
+    ]
+    cart = Alacart::Cart.new(@inventory, modifiers)
+    multibuy = cart.instance_variable_get('@modifiers')['sku1'].first
+    assert_equal ['sku1_multibuy_3'], multibuy.call(['sku1'] * 3)
   end
 
 end
