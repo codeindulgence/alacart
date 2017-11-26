@@ -50,4 +50,13 @@ class CartTest < Minitest::Test
     assert_equal 250, cart.total
   end
 
+  def test_freebie
+    items = ['sku1', 'sku2']
+    modifier = {sku: 'sku1', type: :freebie, params: ['sku2']}
+    cart = Alacart::Cart.new(@inventory, [modifier])
+    items.each {|item| cart.add item }
+    assert_equal ['sku1_freebie_sku2'], cart.discounts
+    assert_equal 100, cart.total
+  end
+
 end
