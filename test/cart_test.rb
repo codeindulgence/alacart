@@ -83,10 +83,20 @@ class CartTest < Minitest::Test
 
   def test_freebie
     @cart.add_modifier sku: 'sku1', type: :freebie, params: ['sku2']
+    # No freebie for just target SKU
     @cart.add 'sku1'
+    assert_equal [], @cart.discounts
+    assert_equal 100, @cart.total
+
+    # Companion item gets discounted
     @cart.add 'sku2'
     assert_equal ['sku1_freebie_sku2'], @cart.discounts
     assert_equal 100, @cart.total
+
+    # Additional companion does not
+    @cart.add 'sku2'
+    assert_equal ['sku1_freebie_sku2'], @cart.discounts
+    assert_equal 120, @cart.total
   end
 
 end
